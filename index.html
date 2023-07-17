@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Liste des médailles</title>
+	<style>
+		/* Couleurs Material Design */
+	:root {
+		--md-red: #f44336;
+		--md-purple: #9c27b0;
+		--md-deep-purple: #673ab7;
+		--md-indigo: #3f51b5;
+		--md-blue: #2196F3;
+		--md-teal: #009688;
+		--md-green: #4CAF50;
+		--md-yellow: #ffeb3b;
+		--md-orange: #ff9800;
+		--md-deep-orange: #ff5722;
+		--md-brown: #795548;
+		--md-grey: #9e9e9e;
+		--md-blue-grey: #607d8b;
+	}
+
+	body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		padding: 0;
+		background-color: var(--md-grey-50);
+	}
+
+	h1 {
+		text-align: center;
+		color: var(--md-blue-900);
+		margin-top: 30px;
+	}
+
+	.container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: flex-start;
+		margin: 20px;
+	}
+
+	.card {
+		width: 450px;
+		margin: 10px;
+		padding: 10px;
+		border-radius: 5px;
+		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+		background-color: var(--md-blue-50);
+	}
+
+	.card h2 {
+		margin-top: 0;
+		font-size: 1.2rem;
+		color: var(--md-blue-900);
+	}
+
+	.card p {
+		margin: 0;
+		font-size: 0.9rem;
+		color: var(--md-grey-800);
+	}
+
+	.card .value {
+		font-weight: bold;
+		font-size: 1.1rem;
+		color: var(--md-blue-700);
+	}
+
+	.card ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.card li {
+		font-size: 0.9rem;
+		margin-bottom: 5px;
+		color: var(--md-grey-800);
+	}
+
+	.card li span {
+		font-weight: bold;
+		margin-right: 5px;
+		color: var(--md-blue-700);
+	}
+	</style>
+	<script src="medals.js"></script>
+</head>
+<body>
+	<h1>Liste des médailles</h1>
+	<div class="container"></div>
+
+	<script>
+		
+		
+		// Crée une carte pour chaque département
+		const deptSet = new Set(data.allMedals.map(medal => medal.departement));
+		const container = document.querySelector('.container');
+		const sortedDeptSet = [...deptSet].sort((a, b) => a - b);
+		for (const dept of sortedDeptSet) {
+			// Crée la carte pour ce département
+			const card = document.createElement('div');
+			card.classList.add('card');
+			container.appendChild(card);
+
+			// Ajoute le nom du département à la carte
+			const title = document.createElement('h2');
+			title.textContent = `Département ${dept}`;
+			card.appendChild(title);
+
+			// Ajoute la liste des médailles à la carte
+			const medalList = document.createElement('ul');
+			card.appendChild(medalList);
+			for (const medal of data.allMedals) {
+				if (medal.departement === dept) {
+					const medalItem = document.createElement('li');
+					medalItem.innerHTML = `<span>${medal.nom}</span> - ${medal.ville} (${medal.codePostal}) - ${medal.value} `;
+					medalList.appendChild(medalItem);
+				}
+			}
+
+			// Calcule la somme des valeurs des médailles pour ce département
+			const medalsValue = data.allMedals.reduce((acc, cur) => {
+				if (cur.departement === dept) {
+					return acc + cur.value;
+				} else {
+					return acc;
+				}
+			}, 0);
+
+			// Ajoute la somme des valeurs des médailles à la carte
+			const totalValue = document.createElement('p');
+			totalValue.classList.add('value');
+			totalValue.textContent = `Total des valeurs : ${medalsValue}`;
+			card.appendChild(totalValue);
+		}
+	</script>
+</body>
+</html>
